@@ -1,12 +1,9 @@
 import React from "react";
-import axios from 'axios';
-
-const ACCESS_TOKEN = "IGQVJYMFRRZAHh5VjFramtDcm1XUk5QMlFCSVNHQWwtNUthbm5XT1RhUmhlVElzbGwyellnbGw1dXloUW5FMXJtNnpJVm53d2g3SjFDNjNMNGNTSlhMUk9YZAFhKTGZATMWlUeDlZATk1n";
 
 function Photo({id, caption, media_url, username, timestamp }){
   return(
     <article id={id} className="article">
-      <img className = "photo" src={media_url}/>
+      <img className = "photo" alt={username} src={media_url}/>
       <div className = "username"> {username} </div>
       <div className = "caption"> 
         {caption}

@@ -1,10 +1,17 @@
 import React from 'react';
 import axios from 'axios';
 import Photo from './photo';
-import CarouselAlbum from './photo';
 import './App.css';
 
 const ACCESS_TOKEN = "IGQVJYMFRRZAHh5VjFramtDcm1XUk5QMlFCSVNHQWwtNUthbm5XT1RhUmhlVElzbGwyellnbGw1dXloUW5FMXJtNnpJVm53d2g3SjFDNjNMNGNTSlhMUk9YZAFhKTGZATMWlUeDlZATk1n";
+
+let tmp = [];
+
+async function getChild(id){
+  tmp = await axios.get(`https://graph.instagram.com/${id}/children?fields=media_url,media_type&access_token=${ACCESS_TOKEN}`); 
+  console.log(tmp.data);
+  return tmp.data;
+}
 
 class App extends React.Component {
   constructor(props){
@@ -13,7 +20,7 @@ class App extends React.Component {
     this.state = {
       isLoading: true,
       data: [],
-      tmp: []
+      child: []
     };
 
     this.getPhotos = async() => {
@@ -21,7 +28,7 @@ class App extends React.Component {
         data: {data}
       } = await axios.get("https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,username,timestamp&access_token=" + ACCESS_TOKEN);
       this.setState({data, isLoading: false});
-    }
+    };
   }
 
   componentDidMount(){
@@ -37,7 +44,7 @@ class App extends React.Component {
         <div className="loader">Loading...</div>
         ) : (
           data.map(function(photo){
-            if(photo.media_type == "IMAGE")
+            if(photo.media_type === "IMAGE")
             return (
               <Photo
                 key = {photo.id}
@@ -47,8 +54,9 @@ class App extends React.Component {
                 timestamp = {photo.timestamp}
               />
             )
-            else if(photo.media_type == "CAROUSEL_ALBUM"){
-              console.log(photo.id);
+            else if(photo.media_type === "CAROUSEL_ALBUM"){
+              this.child = getChild(photo.id);
+              console.log(this.child);
             }
           })
         )
